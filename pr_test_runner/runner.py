@@ -1,4 +1,5 @@
 import subprocess
+import shlex
 from pathlib import Path
 import yaml
 
@@ -29,6 +30,6 @@ def run_tests(
         if dry_run:
             results.append((module, 0))
             continue
-        proc = subprocess.run(command, shell=True)
+        proc = subprocess.run(shlex.split(command))
         results.append((module, proc.returncode))
     return results

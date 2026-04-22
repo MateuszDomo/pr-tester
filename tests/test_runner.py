@@ -41,8 +41,8 @@ def test_run_tests_executes_each_module_sequentially():
             "manage.py test {module}",
         )
     assert mock_run.call_args_list == [
-        call("manage.py test accounts.tests.test_models", shell=True),
-        call("manage.py test accounts.tests.test_views", shell=True),
+        call(["manage.py", "test", "accounts.tests.test_models"]),
+        call(["manage.py", "test", "accounts.tests.test_views"]),
     ]
     assert results == [
         ("accounts.tests.test_models", 0),
