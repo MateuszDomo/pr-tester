@@ -15,7 +15,9 @@ def load_config(repo_root: Path) -> dict:
             "No config file found. Create a `.pr-test-runner.yml` in your repo root."
         )
     config = yaml.safe_load(config_path.read_text())
-    if "{module}" not in config.get("command", ""):
+    if "command" not in config:
+        raise ConfigError("Config file must have a `command` key.")
+    if "{module}" not in config["command"]:
         print("Warning: Command template has no `{module}` placeholder.")
     return config
 

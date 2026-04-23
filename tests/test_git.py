@@ -37,6 +37,12 @@ def test_get_current_branch_raises_when_not_git_repo():
             get_current_branch()
 
 
+def test_get_current_branch_raises_on_detached_head():
+    with patch("subprocess.run", return_value=make_proc("HEAD\n")):
+        with pytest.raises(GitError, match="Detached HEAD"):
+            get_current_branch()
+
+
 def test_get_github_remote_parses_https_url():
     with patch("subprocess.run", return_value=make_proc("https://github.com/myorg/myrepo.git\n")):
         owner, repo = get_github_remote()

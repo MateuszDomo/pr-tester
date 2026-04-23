@@ -21,6 +21,11 @@ def test_filter_excludes_init_files_in_tests_dir():
     assert filter_test_files(files) == ["accounts/tests/test_models.py"]
 
 
+def test_filter_includes_non_test_prefixed_modules_in_tests_dir():
+    files = ["accounts/tests/base.py", "accounts/tests/utils.py", "accounts/models.py"]
+    assert filter_test_files(files) == ["accounts/tests/base.py", "accounts/tests/utils.py"]
+
+
 def test_path_to_module_converts_slashes_and_strips_extension():
     assert path_to_module("accounts/tests/test_models.py") == "accounts.tests.test_models"
 

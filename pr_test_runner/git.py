@@ -22,7 +22,10 @@ def get_current_branch() -> str:
     )
     if result.returncode != 0:
         raise GitError("Not a git repository.")
-    return result.stdout.strip()
+    branch = result.stdout.strip()
+    if branch == "HEAD":
+        raise GitError("Detached HEAD state — cannot determine current branch.")
+    return branch
 
 
 def get_github_remote() -> tuple[str, str]:

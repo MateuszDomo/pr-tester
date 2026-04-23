@@ -23,6 +23,12 @@ def test_load_config_warns_when_placeholder_missing(tmp_path, capsys):
     assert "no `{module}` placeholder" in capsys.readouterr().out
 
 
+def test_load_config_raises_when_command_key_missing(tmp_path):
+    (tmp_path / ".pr-test-runner.yml").write_text('foo: bar\n')
+    with pytest.raises(ConfigError, match="must have a `command` key"):
+        load_config(tmp_path)
+
+
 def test_run_tests_dry_run_prints_commands_without_subprocess(capsys):
     with patch("subprocess.run") as mock_run:
         results = run_tests(

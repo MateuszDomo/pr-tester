@@ -36,6 +36,7 @@ def get_pr_files(owner: str, repo: str, branch: str, token: str) -> list[str]:
     pr_number = prs[0]["number"]
     files_response = httpx.get(
         f"https://api.github.com/repos/{owner}/{repo}/pulls/{pr_number}/files",
+        params={"per_page": 100},
         headers=headers,
     )
     files_response.raise_for_status()
