@@ -17,17 +17,17 @@ def load_config(repo_root: Path) -> dict:
     config = yaml.safe_load(config_path.read_text())
     if "command" not in config:
         raise ConfigError("Config file must have a `command` key.")
-    if "{module}" not in config["command"]:
-        print("Warning: Command template has no `{module}` placeholder.")
+    if "{module}" not in config["command"] and "{file}" not in config["command"]:
+        print("Warning: Command template has no `{module}` or `{file}` placeholder.")
     return config
 
 
 def run_tests(
-    modules: list[str], command_template: str, dry_run: bool = False
+    test_files: list[str], modules: list[str], command_template: str, dry_run: bool = False
 ) -> list[tuple[str, int]]:
     results = []
-    for module in modules:
-        command = command_template.replace("{module}", module)
+    for file_path, module in zip(test_files, modules):
+        command = command_template.replace("{module}", module).replace("{file}", file_path)
         print(f"\n>>> Running: {command}")
         if dry_run:
             results.append((module, 0))

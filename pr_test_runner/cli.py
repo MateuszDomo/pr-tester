@@ -51,7 +51,7 @@ def main() -> None:
         return
 
     modules = [path_to_module(f) for f in test_files]
-    results = run_tests(modules, config["command"], dry_run=args.dry_run)
+    results = run_tests(test_files, modules, config["command"], dry_run=args.dry_run)
 
     passed = sum(1 for _, code in results if code == 0)
     failed = sum(1 for _, code in results if code != 0)

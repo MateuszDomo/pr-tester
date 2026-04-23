@@ -1,1 +1,1 @@
-command: "python manage.py test {module}"
+command: "pytest {file}"

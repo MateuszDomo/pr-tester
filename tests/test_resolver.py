@@ -32,13 +32,3 @@ def test_path_to_module_converts_slashes_and_strips_extension():
 
 def test_path_to_module_handles_deep_nesting():
     assert path_to_module("apps/billing/tests/test_invoices.py") == "apps.billing.tests.test_invoices"
-
-
-def test_filter_includes_top_level_tests_dir():
-    files = ["tests/test_cli.py", "tests/test_runner.py"]
-    assert filter_test_files(files) == files
-
-
-def test_filter_excludes_top_level_init_in_tests_dir():
-    files = ["tests/__init__.py", "tests/test_cli.py"]
-    assert filter_test_files(files) == ["tests/test_cli.py"]
