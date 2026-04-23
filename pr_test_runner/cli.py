@@ -7,7 +7,7 @@ from pr_test_runner.runner import load_config, run_tests, ConfigError
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run tests changed in the current branch's GitHub PR.")
     parser.add_argument("--dry-run", action="store_true", help="Print commands without running them.")
-    args, _ = parser.parse_known_args()
+    args = parser.parse_args()
     try:
         repo_root = get_repo_root()
         config = load_config(repo_root)
