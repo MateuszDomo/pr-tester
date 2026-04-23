@@ -11,9 +11,12 @@ def get_token() -> str:
     token = os.environ.get("GITHUB_TOKEN")
     if token:
         return token
-    result = subprocess.run(["gh", "auth", "token"], capture_output=True, text=True)
-    if result.returncode == 0 and result.stdout.strip():
-        return result.stdout.strip()
+    try:
+        result = subprocess.run(["gh", "auth", "token"], capture_output=True, text=True)
+        if result.returncode == 0 and result.stdout.strip():
+            return result.stdout.strip()
+    except FileNotFoundError:
+        pass
     raise GitHubError(
         "No GitHub token found. Set GITHUB_TOKEN or run `gh auth login`."
     )

@@ -12,7 +12,7 @@ def load_config(repo_root: Path) -> dict:
     config_path = repo_root / ".pr-test-runner.yml"
     if not config_path.exists():
         raise ConfigError(
-            "No config file found. Create a `.pr-test-runner.yml` in your repo root."
+            "No config file found. Run `pr-test-runner init` to create one."
         )
     config = yaml.safe_load(config_path.read_text())
     if "command" not in config:

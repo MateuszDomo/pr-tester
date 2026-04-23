@@ -7,10 +7,32 @@ from pr_test_runner.resolver import filter_test_files, path_to_module
 from pr_test_runner.runner import load_config, run_tests, ConfigError
 
 
+def _init() -> None:
+    try:
+        repo_root = get_repo_root()
+    except GitError as e:
+        print(f"Error: {e}")
+        sys.exit(1)
+
+    config_path = repo_root / ".pr-test-runner.yml"
+    if config_path.exists():
+        print(f"Config file already exists: {config_path}")
+        sys.exit(1)
+
+    config_path.write_text('command: "python manage.py test {module}"\n')
+    print(f"Created {config_path}")
+    print("Edit the `command` value to match your test runner.")
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run tests changed in the current branch's GitHub PR.")
+    parser.add_argument("command", nargs="?", choices=["init"], help="init: create a default config file.")
     parser.add_argument("--dry-run", action="store_true", help="Print commands without running them.")
     args = parser.parse_args()
+
+    if args.command == "init":
+        _init()
+        return
 
     try:
         repo_root = get_repo_root()
@@ -20,7 +42,7 @@ def main() -> None:
         token = get_token()
         files = get_pr_files(owner, repo, branch, token)
     except (GitError, GitHubError, ConfigError) as e:
-        print(f"Error: {e}", file=sys.stderr)
+        print(f"Error: {e}")
         sys.exit(1)
 
     test_files = filter_test_files(files)
@@ -37,3 +59,7 @@ def main() -> None:
     print(f"\n--- Summary: {total} ran, {passed} passed, {failed} failed ---")
     if failed:
         sys.exit(1)
+
+
+if __name__ == "__main__":
+    main()
